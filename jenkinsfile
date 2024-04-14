@@ -30,10 +30,11 @@ pipeline {
     }
 
         }
-        stage('Docker') {
+         stage('build docker image') {
             steps {
                 script {
-                    sh 'mvn dependency:get -Dartifact=tn.esprit:DevOps_Project'
+                    sh 'mvn dependency:get -Dartifact=tn.esprit:4TWIN1-G2-ProjetFinal:1.0'
+                    sh 'mvn install -DskipTests'
                     sh 'docker-compose build'
                 }
             }
