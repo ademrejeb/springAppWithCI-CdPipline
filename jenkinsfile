@@ -21,11 +21,15 @@ pipeline {
         }
         
         stage('Deploy to Nexus') {
-            steps {
-                script {
-                    sh 'mvn deploy -DskipTests'
-                }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: registryCredentials, usernameVariable: 'admin', passwordVariable: 'admin')]) {
+                sh "mvn deploy -DskipTests -Dmaven.deploy.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -DaltDeploymentRepository=nexus::default::https://${admin}:${admin}@${registry}/repository/maven-releases/"
             }
+        }
+    }
+}
+   }
         }
         stage('Docker') {
             steps {
