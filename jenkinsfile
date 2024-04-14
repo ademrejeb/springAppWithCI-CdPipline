@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    environment {
+        registryCredentials = "nexus"
+        registry = "192.168.33.10:8083"
+    }
+    stages {
+        stage('Maven ') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+                sh 'mvn compile -DskipTests'
+            }
+        }
+
+        stage('Unit Test For Supplier Controller'){
+            steps {
+            script {
+                sh 'mvn test'
+            }
+            }
+        }
+        
+        stage('Deploy to Nexus') {
+            steps {
+                script {
+                    sh 'mvn deploy -DskipTests'
+                }
+            }
+        }
+        stage('Docker') {
+            steps {
+                script {
+                    sh 'mvn dependency:get -Dartifact=tn.esprit:4TWIN1-G2-ProjetFinal:1.0'
+                    sh 'docker-compose build'
+                }
+            }
+        }
+        stage('Docker Compose') {
+            steps {
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+        
+    }
+}
