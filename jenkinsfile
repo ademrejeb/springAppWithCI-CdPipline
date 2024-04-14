@@ -33,7 +33,7 @@ pipeline {
         stage('Docker') {
             steps {
                 script {
-                    sh 'mvn dependency:get -Dartifact=tn.esprit:4TWIN1-G2-ProjetFinal:1.0'
+                    sh 'mvn dependency:get -Dartifact=tn.esprit:DevOps_Project'
                     sh 'docker-compose build'
                 }
             }
