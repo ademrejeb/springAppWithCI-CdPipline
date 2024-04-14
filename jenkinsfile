@@ -5,7 +5,7 @@ pipeline {
         registry = "192.168.33.10:8083"
     }
     stages {
-        stage('Maven ') {
+        stage('Maven clean and install  ') {
             steps {
                 sh 'mvn clean install -DskipTests'
                 sh 'mvn compile -DskipTests'
@@ -20,7 +20,7 @@ pipeline {
             }
         }
         
-        stage('Deploy to Nexus') {
+        stage(' Nexus deployment') {
     steps {
         script {
             withCredentials([usernamePassword(credentialsId: registryCredentials, usernameVariable: 'admin', passwordVariable: 'nexus')]) {
@@ -39,13 +39,29 @@ pipeline {
                 }
             }
         }
-        stage('Docker Compose') {
+        stage('Docker COMPOSE-UP') {
             steps {
                 script {
                     sh 'docker-compose up -d'
                 }
             }
         }
+
+        stage('Prometheus Start'){
+            steps {
+                    script{
+                            sh 'docker start prometheus'
+                            }
+                    }
+                }
+
+stage('Grafan Start'){
+            steps {
+                    script{
+                            sh 'docker start grafana'
+                            }
+                    }
+                }
         
     }
 }
