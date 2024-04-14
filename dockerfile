@@ -1,4 +1,9 @@
 FROM openjdk:17
+
+WORKDIR /app
+
+COPY ./target/4TWIN1-G2-ProjetFinal-1.0.jar /app/4TWIN1-G2-ProjetFinal-1.0.jar
+
 EXPOSE 8090
-ADD ./target/DevOps_Project.jar DevOps_Project.jar
-ENTRYPOINT ["java","-jar","DevOps_Project.jar"]
+
+CMD ["java", "-jar", "/app/4TWIN1-G2-ProjetFinal-1.0.jar"]
